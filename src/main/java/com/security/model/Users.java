@@ -1,5 +1,6 @@
 package com.security.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -8,6 +9,7 @@ public class Users {
 	@Id
  private int id;
  private String username;
+ @Column(length =150)
  private String password;
 public int getId() {
 	return id;
