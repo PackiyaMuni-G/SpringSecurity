@@ -3,10 +3,11 @@ package com.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -34,7 +35,10 @@ public class SecurityConfig {
 		http
 		.csrf(customizer ->customizer.disable()) //enable the csrf
 		
-		.authorizeHttpRequests(request -> request.anyRequest().authenticated()) //Require every req must be authenticated or login
+		.authorizeHttpRequests(request -> request
+				.requestMatchers("login", "register")
+				.permitAll()
+				.anyRequest().authenticated()) //Require every req must be authenticated or login
 		.httpBasic(Customizer.withDefaults()) //provide basic authentication by spring security so
 //		.formLogin(Customizer.withDefaults()) //provide a form-based auth to enter user their credentials
 		.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS.STATELESS));   //enabling csrf by making http stateless
@@ -91,4 +95,8 @@ public class SecurityConfig {
 //	    public PasswordEncoder passwordEncoder() {
 //	        return new BCryptPasswordEncoder(10); // Adjust strength as needed
 //	    }
+	 @Bean
+	 public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		 return config.getAuthenticationManager();
+	 }
 }

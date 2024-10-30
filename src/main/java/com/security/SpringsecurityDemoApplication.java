@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.security", "com.security.service"})
+//@ComponentScan(basePackages = {"com.security", "com.security.service"})
 public class SpringsecurityDemoApplication {
 
 	public static void main(String[] args) {
