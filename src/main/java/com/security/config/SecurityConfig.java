@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,19 +30,24 @@ import org.springframework.context.annotation.Bean;
 public class SecurityConfig {
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private JwtFilter jwtFilter;
+	
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		
-		http
+		 return http
 		.csrf(customizer ->customizer.disable()) //enable the csrf
 		
 		.authorizeHttpRequests(request -> request
 				.requestMatchers("login", "register")
 				.permitAll()
+				
 				.anyRequest().authenticated()) //Require every req must be authenticated or login
 		.httpBasic(Customizer.withDefaults()) //provide basic authentication by spring security so
 //		.formLogin(Customizer.withDefaults()) //provide a form-based auth to enter user their credentials
-		.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS.STATELESS));   //enabling csrf by making http stateless
+		.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS.STATELESS))   //enabling csrf by making http stateless
 		
 //		 Customizer<CsrfConfigurer<HttpSecurity>> custcsrf=new  Customizer<CsrfConfigurer<HttpSecurity>> () {
 //           @Override
@@ -50,9 +56,10 @@ public class SecurityConfig {
 //			}
 //			 
 //		 };            //ananymous class
+		   
 		
-		
-		return http.build();
+		 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+				 .build();
 		
         	  
           }
