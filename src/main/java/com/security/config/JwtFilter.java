@@ -37,7 +37,7 @@ public class JwtFilter  extends OncePerRequestFilter{
 		//req obj have lot of details
 		//Extracting specific auth header from whole header in url
 		//below sample jwt token for reference 
-		//Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtdW5pIiwiaWF0IjoxNzMwMjk0ODQwLCJleHAiOjE3MzA4OTk2NDB9.mlxUh7xt2gD_wRGEOKkHTWf1cvlVrqK7No5k0_iwtSBajHbZUWiNfVrnBHfQgTwS
+		
 		  String authHeader = request.getHeader("Authorization"); //it starts with Bearer  xxxx
 		 String token=null;
 		  String username=null;
@@ -56,7 +56,8 @@ public class JwtFilter  extends OncePerRequestFilter{
 			  //userDetails or username is mentioning which part of db
 	 if(jwtService.validateToken(token,userDetails)) {
 		 //if token and userDetails is valid successfully it will move to next filter
-		 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken( userDetails, null,userDetails.getAuthorities());
+		 UsernamePasswordAuthenticationToken authToken = 
+				 new UsernamePasswordAuthenticationToken( userDetails, null,userDetails.getAuthorities());
 	   //authtoken knows about the user
 		 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 //		 Sets user details and authorities in SecurityContext
